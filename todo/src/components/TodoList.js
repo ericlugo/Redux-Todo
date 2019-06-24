@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { toggleTodo } from '../actions';
+import { toggleTodo, deleteTodo } from '../actions';
 
 const ListContainer = styled.article`
   background-color: #ffffff;
@@ -17,22 +17,40 @@ const TodoItem = styled.section`
   font-size: 1.4rem;
   margin: 1rem;
   padding: 1rem;
-  position: relative;
+  ${(props) => (props.completed ? 'display: flex; justify-content: space-between;' : '')}
 
   &:hover {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   }
 
-  &::after {
-    ${(props) =>
-      props.completed
-        ? `border-bottom: 2px solid #fafafa;
-          content: '';
-          left: 1rem;
-          position: absolute;
-          top: 45%;
-          width: 95%;`
-        : ``}
+  p {
+    position: relative;
+    ::after {
+      ${(props) =>
+        props.completed
+          ? `border-bottom: 2px solid #fafafa;
+            content: '';
+            left: 0;
+            position: absolute;
+            bottom: 55%;
+            width: 95%;`
+          : ``}
+    }
+  }
+`;
+const DeleteButton = styled.button`
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  background-color: #eceff1;
+  border: none;
+  border-radius: 0 0.2rem 0.2rem 0;
+  color: #263238;
+  flex-grow: 0;
+  font-size: 1.6rem;
+  margin-left: 1rem;
+
+  &:hover {
+    background-color: #fafafa;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   }
 `;
 
@@ -40,6 +58,11 @@ class TodoList extends React.Component {
   handleToggle = (event, index) => {
     event.preventDefault();
     this.props.toggleTodo(index);
+  };
+  handleDelete = (event, index) => {
+    event.stopPropagation();
+    event.preventDefault();
+    this.props.deleteTodo(index);
   };
   render() {
     return (
@@ -50,7 +73,14 @@ class TodoList extends React.Component {
             onClick={(event) => this.handleToggle(event, index)}
             completed={todo.completed ? true : false}
           >
-            {todo.value}
+            <p>{todo.value}</p>
+            {todo.completed ? (
+              <DeleteButton onClick={(event) => this.handleDelete(event, index)}>
+                Delete Task
+              </DeleteButton>
+            ) : (
+              ''
+            )}
           </TodoItem>
         ))}
       </ListContainer>
@@ -66,5 +96,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
   mapStateToProps,
-  { toggleTodo },
+  { toggleTodo, deleteTodo },
 )(TodoList);
