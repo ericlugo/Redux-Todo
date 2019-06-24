@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { toggleTodo, deleteTodo } from '../actions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const ListContainer = styled.article`
   background-color: #ffffff;
@@ -73,10 +74,15 @@ class TodoList extends React.Component {
             onClick={(event) => this.handleToggle(event, index)}
             completed={todo.completed ? true : false}
           >
+            {todo.completed ? (
+              <FontAwesomeIcon icon={['fas', 'check-circle']} />
+            ) : (
+              <FontAwesomeIcon icon={['fas', 'circle']} />
+            )}
             <p>{todo.value}</p>
             {todo.completed ? (
               <DeleteButton onClick={(event) => this.handleDelete(event, index)}>
-                Delete Task
+                <FontAwesomeIcon icon={['fas', 'trash-alt']} />
               </DeleteButton>
             ) : (
               ''

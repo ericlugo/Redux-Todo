@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { clearAll, clearCompleted } from '../actions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const ActionWrapper = styled.div`
   max-width: 600px;
@@ -37,9 +38,13 @@ class ActionBar extends React.Component {
     return (
       <ActionWrapper>
         <ActionButton warning onClick={this.handleClearAll}>
+          <FontAwesomeIcon icon={['fas', 'ban']} />
           Clear All
         </ActionButton>
-        <ActionButton onClick={this.handleClearCompleted}>Clear Completed</ActionButton>
+        <ActionButton onClick={this.handleClearCompleted}>
+          <FontAwesomeIcon icon={['fas', 'trash-alt']} />
+          Clear Completed
+        </ActionButton>
       </ActionWrapper>
     );
   }

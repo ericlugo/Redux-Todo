@@ -1,8 +1,29 @@
 import React from 'react';
 import styled from 'styled-components';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { connect } from 'react-redux';
+import { pullDataset, LOCAL_STORAGE } from './actions';
+import {
+  faBackspace,
+  faBan,
+  faCheckCircle,
+  faCircle,
+  faPlus,
+  faTrashAlt,
+} from '@fortawesome/free-solid-svg-icons';
 import TodoList from './components/TodoList';
 import TodoForm from './components/TodoForm';
 import ActionBar from './components/ActionBar';
+
+library.add(
+  faBackspace,
+  faBan,
+  faCheckCircle,
+  faCircle,
+  faPlus,
+  faTrashAlt,
+  // more icons can go here as needed
+);
 
 const AppContainer = styled.div`
   display: flex;
@@ -22,19 +43,38 @@ const Header = styled.header`
   }
 `;
 
-const App = () => {
-  return (
-    <>
-      <Header>
-        <h1>TODO LIST REDUX</h1>
-      </Header>
-      <AppContainer>
-        <TodoForm />
-        <TodoList />
-        <ActionBar />
-      </AppContainer>
-    </>
-  );
+class App extends React.Component {
+  componentDidMount() {
+    if (!localStorage.getItem(LOCAL_STORAGE)) {
+      localStorage.setItem(LOCAL_STORAGE, JSON.stringify([]));
+    } else {
+      const localDataset = JSON.parse(localStorage.getItem(LOCAL_STORAGE));
+      this.props.pullDataset(localDataset);
+    }
+  }
+  render() {
+    return (
+      <>
+        <Header>
+          <h1>TODO LIST REDUX</h1>
+        </Header>
+        <AppContainer>
+          <TodoForm />
+          <TodoList />
+          <ActionBar />
+        </AppContainer>
+      </>
+    );
+  }
+}
+
+const mapStateToProps = (state) => {
+  return {
+    todos: state.todos,
+  };
 };
 
-export default App;
+export default connect(
+  mapStateToProps,
+  { pullDataset },
+)(App);

@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { addTodo } from '../actions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Form = styled.form`
   background-color: #ffffff;
@@ -68,7 +69,10 @@ class TodoForm extends React.Component {
           placeholder='add new todo here...'
           onChange={this.handleInput}
         />
-        <SubmitButton onClick={this.addTodo}>Submit Task</SubmitButton>
+        <SubmitButton onClick={this.addTodo}>
+          <FontAwesomeIcon icon={['fas', 'plus']} />
+          Submit Task
+        </SubmitButton>
       </Form>
     );
   }
